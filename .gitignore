@@ -1,0 +1,20 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Mininet logs and temp files
+*.log
+*.pcap
+mn.log
+
+# Result CSVs (optional — keep if you want results tracked)
+# results/*.csv
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large backup zips
+backups/*.zip
