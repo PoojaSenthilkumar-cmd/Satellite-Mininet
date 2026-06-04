@@ -1,0 +1,4 @@
+profile,delay_set,rtt_avg_ms,jitter_ms,loss_pct,throughput_mbps,bw_set_mbps
+terrestrial,5ms,20.679,2.201,0.0,40.4,100
+leo,20ms,81.458,8.331,4.0,1.41,100
+geo,270ms,1147.064,214.841,7.0,0.0,20

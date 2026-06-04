@@ -86,9 +86,28 @@ def full_satellite_sim(profile_name='geo'):
     print(h1.cmd('iperf3 -c 10.0.0.2 -t 15 -i 5'))
  
     # Test 4: TCP retransmission check
+    #---- printing retransmission rate instead of raw count 
+    # -- refer code below this commented section
+    # print('\n--- TCP retransmission check (Paper 3 finding) ---')
+    # print('Retransmission statistics:')
+    # print(h1.cmd('ss -tin | grep retrans | head -5'))
+    # --
     print('\n--- TCP retransmission check (Paper 3 finding) ---')
-    print('Retransmission statistics:')
-    print(h1.cmd('ss -tin | grep retrans | head -5'))
+    h2.cmd('iperf3 -s -D')
+    time.sleep(1)
+    iperf_raw = h1.cmd('iperf3 -c 10.0.0.2 -t 20')
+    import re
+    retrans_match = re.search(r'sender.*?(\d+)\s*$', iperf_raw, re.MULTILINE)
+    transfer_match = re.search(r'(\d+\.?\d*)\s*MBytes\s+[\d.]+\s+Mbits/sec\s+(\d+)\s+sender', iperf_raw)
+    if transfer_match:
+    	mb_sent = float(transfer_match.group(1))
+    	retrans = int(transfer_match.group(2))
+    	rate = retrans / mb_sent if mb_sent > 0 else 0
+    	print(f'  Retransmits (raw):  {retrans}')
+    	print(f'  Data sent:          {mb_sent:.2f} MB')
+    	print(f'  Retransmit rate:    {rate:.1f} retrans/MB  ← compare this, not raw count')
+    else:
+    	print(iperf_raw)   
  
     print('\nEntering CLI for manual testing.')
     print('Try: h1 ping -c 100 10.0.0.2')
